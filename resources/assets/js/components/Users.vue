@@ -1,7 +1,8 @@
 <template>
     <div class="container">
-        <div class="row mt-2">
+        <div class="row mt-2" v-if="$gate.isAdmin()">
           <div class="col-md-12">
+
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Users Table</h3>
@@ -53,6 +54,10 @@
             </div>
             <!-- /.card -->
             </div>
+        </div>
+
+        <div v-if="!$gate.isAdmin()">
+            <not-found></not-found>
         </div>
 
         <div class="modal fade" id="modalNew" tabindex="-1" role="dialog" aria-labelledby="modalNewLabel" aria-hidden="true">
@@ -124,13 +129,7 @@
             
             </div>
         </div>
-
     </div>
-
-
-
-    
-
 </template>
 
 <script>
@@ -138,6 +137,7 @@
         data() {
             
             return{
+
                 editmode: false,
                 users: {},
                 form: new Form({
@@ -149,6 +149,7 @@
                     bio: '',
                     photo: ''
                 })
+                
             }
         },
 
@@ -213,16 +214,21 @@
                             Fire.$emit('AfterCreate');
 
                         }).catch( ()=>{
-                            swal("Failed!", "There was something wrong.", "warning");
+                            swal.fire("Failed!", "There was something wrong.", "warning");
                         } );
                     }
 
                 })
 
             },
+
             loadUsers(){
-                axios.get("api/user").then( ({ data }) => (this.users = data.data) );
+                if(this.$gate.isAdmin()){
+                    axios.get("api/user").then( ({ data }) => (this.users = data.data) );
+                }
+                
             },
+
             createUser(){
                 this.$Progress.start();
                 

@@ -15,6 +15,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="/css/app.css">
 </head>
 <body class="hold-transition sidebar-mini">
+  
 <div class="wrapper" id="app">
 
   <!-- Navbar -->
@@ -62,6 +63,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="info">
           <a href="#" class="d-block">
             {{Auth::user()->name}}
+
+            <p> {{Auth::user()->type}} </p>
           </a>
         </div>
       </div>
@@ -82,7 +85,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
 
           
-
+          @can('isAdmin')
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-cog green"></i>
@@ -105,6 +108,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             </ul>
           </li>
+          
+          
+          <li class="nav-item">
+            <router-link to="/developer" class="nav-link">
+              <i class="nav-icon fas fa-cogs"></i>
+              <p>
+                Developer
+              </p>
+            </router-link>
+          </li>
+          @endcan
 
           <li class="nav-item">
             <router-link to="/profile" class="nav-link">
@@ -114,6 +128,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </router-link>
           </li>
+
+
+          
+
 
           <li class="nav-item">
 
@@ -171,6 +189,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </div>
 <!-- ./wrapper -->
 
+
+@auth
+  <script>
+    window.user = @json(auth()->user()) 
+  </script>
+    
+@endauth
 
 <script src="/js/app.js"></script>
 
