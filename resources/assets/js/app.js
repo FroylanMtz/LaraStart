@@ -12,6 +12,7 @@ import moment from 'moment';
 import { Form, HasError, AlertError } from 'vform'
 
 import Gate from "./Gate";
+
 Vue.prototype.$gate = new Gate(window.user);
 
 
@@ -35,6 +36,8 @@ Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
 
 
+Vue.component('pagination', require('laravel-vue-pagination'));
+
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
@@ -50,7 +53,8 @@ let routes = [
     { path: '/dashboard', component: require('./components/Dashboard.vue') },
     { path: '/profile', component: require('./components/Profile.vue') },
     { path: '/users', component: require('./components/Users.vue') },
-    { path: '/developer', component: require('./components/Developer.vue') }
+    { path: '/developer', component: require('./components/Developer.vue') },
+    { path: '*', component: require('./components/NotFound.vue') }
   ]
 
 
@@ -101,7 +105,22 @@ Vue.component(
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
+
+
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    data:{
+      search: ''
+    },
+    methods: {
+      searchit: _.debounce(() => {
+        Fire.$emit('searching');
+      }, 1000),
+
+      printme(){
+        window.print();
+      }
+
+    },
 });
